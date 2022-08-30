@@ -54,7 +54,7 @@ void ConfigManager::createFile()
 void ConfigManager::resetSettings()
 {
 	m_values.insert({ "General_UseAllDisplays", 0 });
-	m_values.insert({ "General_ScoreToWin", 10 });
+	m_values.insert({ "General_WinScore", 10 });
 	m_values.insert({ "Color_Paddle1_R", 255 });
 	m_values.insert({ "Color_Paddle1_G", 255 });
 	m_values.insert({ "Color_Paddle1_B", 255 });
