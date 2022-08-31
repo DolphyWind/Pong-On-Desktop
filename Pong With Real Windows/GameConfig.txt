@@ -1,0 +1,20 @@
+# The symbol '#' makes rest of the line a comment.
+
+Keyboard_Quit=36
+Keyboard_Paddle2_UpKey=73
+Keyboard_Paddle2_DownKey=74
+Keyboard_Paddle1_UpKey=22
+Keyboard_Paddle1_DownKey=18
+General_WinScore=10
+General_UseAllDisplays=0
+Color_Paddle2_R=255
+Color_Paddle2_G=255
+Color_Paddle2_B=255
+Color_Paddle1_R=255
+Color_Paddle1_G=255
+Color_Paddle1_B=255
+Color_Ball_R=255
+Color_Ball_G=255
+Color_Ball_B=255
+
+# Visit https://documentation.help/SFML.Net/7aeaa645-3732-3c60-a542-8732c47880e2.htm to see which number corresponds to which key

@@ -5,15 +5,23 @@
 #include <vector>
 #include "GameElement.h"
 #include "ConfigManager.h"
+#include "Paddle.h"
 
 class GameManager
 {
 private:
-	RECT desktop;
-	std::vector<GameElement> m_gameElements;
+	RECT m_desktop;
+	bool m_gameOver = false;
+	sf::Clock m_deltaClock;
+	sf::Time m_deltaTime;
+	std::vector<GameElement*> m_gameElements;
 	ConfigManager m_configManager;
 public:
 	GameManager();
+	~GameManager();
+	void handleEvents();
+	void update();
+	void draw();
 	void mainLoop();
 };
 

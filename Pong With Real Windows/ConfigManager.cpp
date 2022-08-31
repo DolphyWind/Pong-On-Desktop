@@ -53,21 +53,22 @@ void ConfigManager::createFile()
 
 void ConfigManager::resetSettings()
 {
-	m_values.insert({ "General_UseAllDisplays", 0 });
-	m_values.insert({ "General_WinScore", 10 });
-	m_values.insert({ "Color_Paddle1_R", 255 });
-	m_values.insert({ "Color_Paddle1_G", 255 });
-	m_values.insert({ "Color_Paddle1_B", 255 });
-	m_values.insert({ "Color_Paddle2_R", 255 });
-	m_values.insert({ "Color_Paddle2_G", 255 });
-	m_values.insert({ "Color_Paddle2_B", 255 });
-	m_values.insert({ "Color_Ball_R", 255 });
-	m_values.insert({ "Color_Ball_G", 255 });
-	m_values.insert({ "Color_Ball_B", 255 });
-	m_values.insert({ "Keyboard_Paddle1_UpKey", sf::Keyboard::Key::W });
-	m_values.insert({ "Keyboard_Paddle1_DownKey", sf::Keyboard::Key::S });
-	m_values.insert({ "Keyboard_Paddle2_UpKey", sf::Keyboard::Key::Up });
-	m_values.insert({ "Keyboard_Paddle2_DownKey", sf::Keyboard::Key::Down });
+	m_values.insert({ UseAllDisplaysKey, 0 });
+	m_values.insert({ WinScoreKey, 10 });
+	m_values.insert({ Paddle1RKey, 255 });
+	m_values.insert({ Paddle1GKey, 255 });
+	m_values.insert({ Paddle1BKey, 255 });
+	m_values.insert({ Paddle2RKey, 255 });
+	m_values.insert({ Paddle2GKey, 255 });
+	m_values.insert({ Paddle2BKey, 255 });
+	m_values.insert({ BallRKey, 255 });
+	m_values.insert({ BallGKey, 255 });
+	m_values.insert({ BallBKey, 255 });
+	m_values.insert({ Paddle1UpKey, sf::Keyboard::Key::W });
+	m_values.insert({ Paddle1DownKey, sf::Keyboard::Key::S });
+	m_values.insert({ Paddle2UpKey, sf::Keyboard::Key::Up });
+	m_values.insert({ Paddle2DownKey, sf::Keyboard::Key::Down });
+	m_values.insert({ QuitKey, sf::Keyboard::Key::Escape });
 }
 
 std::string ConfigManager::lrTrim(const std::string& str)
@@ -75,6 +76,11 @@ std::string ConfigManager::lrTrim(const std::string& str)
 	std::size_t firstNonSpace = str.find_first_not_of(' ');
 	std::size_t lastNonSpace = str.find_last_not_of(' ') + 1;
 	return str.substr(firstNonSpace, lastNonSpace);
+}
+
+int ConfigManager::get(const std::string& key)
+{
+	return m_values.at(key);
 }
 
 ConfigManager::ConfigManager()

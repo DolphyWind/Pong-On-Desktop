@@ -5,6 +5,7 @@
 #include <map>
 #include <unordered_map>
 #include <filesystem>
+#include "keyvalues.h"
 
 class ConfigManager
 {
@@ -21,5 +22,6 @@ private:
 public:
 	ConfigManager();
 	~ConfigManager();
+	int get(const std::string& key);
 };
 
