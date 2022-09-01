@@ -11,6 +11,7 @@
 class Ball : public GameElement
 {
 private:
+	const float m_defaultSpeed = 500;
 	float m_radius;
 	float m_speed;
 	void makeCircular();
@@ -21,6 +22,7 @@ private:
 	sf::Vector2f m_moveVector;
 	Paddle* m_paddleLeft;
 	Paddle* m_paddleRight;
+	sf::Vector2f normalizeVector(const sf::Vector2f& vec);
 public:
 	Ball(RECT* desktop, ConfigManager* configManager, Paddle* paddleLeft, Paddle* paddleRight);
 	void update(sf::Time deltaTime) override;

@@ -14,16 +14,16 @@ void Ball::makeCircular()
 
 void Ball::randomizeAngle()
 {
+	float max_angle = 50;
 	while (true)
 	{
 		float angle;
 		angle = (rand() % 360) * M_PI / 180 - M_PI;
 		m_moveVector.x = m_speed * cos(angle);
 		m_moveVector.y = m_speed * sin(angle);
-		if (std::fabs(angle) > M_PI / 3 && std::fabs(angle) < 2 * M_PI / 3) continue;
+		if (std::fabs(angle) > max_angle * M_PI / 180.f && std::fabs(angle) < (180.f - max_angle) * M_PI / 180.f) continue;
 		break;
 	}
-	
 }
 
 void Ball::restartGame()
@@ -33,6 +33,7 @@ void Ball::restartGame()
 		((int)m_desktop->right - (int)m_desktop->left) / 2 - m_radius,
 		((int)m_desktop->bottom - (int)m_desktop->top) / 2 - m_radius
 	));
+	m_speed = m_defaultSpeed;
 	randomizeAngle();
 
 	m_paddleLeft->reposition(true);
@@ -43,10 +44,16 @@ void Ball::restartGame()
 	m_paddleRight->resetTime();
 }
 
+sf::Vector2f Ball::normalizeVector(const sf::Vector2f& vec)
+{
+	float length = std::hypotf(vec.x, vec.y);
+	return sf::Vector2f(vec.x / length, vec.y / length);
+}
+
 Ball::Ball(RECT* desktop, ConfigManager* configManager, Paddle* paddleLeft, Paddle* paddleRight) : GameElement(desktop, configManager)
 {
 	m_radius = 15;
-	m_speed = 500;
+	m_speed = m_defaultSpeed;
 	m_paddleLeft = paddleLeft;
 	m_paddleRight = paddleRight;
 
@@ -111,14 +118,32 @@ void Ball::checkPaddleCollision()
 	paddleRightShape.setPosition(m_paddleRight->getPosition().x, m_paddleRight->getPosition().y);
 	paddleRightShape.setSize(sf::Vector2f(m_paddleRight->getSize().x, m_paddleRight->getSize().y));
 
+	const float speedIncrement = 25;
+	const float ratioMultiple = (1.f / 6.f);
+
 	if (ballShape.getGlobalBounds().intersects(paddleLeftShape.getGlobalBounds()) && m_moveVector.x < 0)
 	{
-		// For now multiply by -1 I'll add a better system later on
+		m_speed += speedIncrement;
 		m_moveVector.x *= -1;
+		m_moveVector = normalizeVector(m_moveVector);
+		float paddleHalfLength = paddleLeftShape.getSize().y / 2;
+		float ratio = (paddleLeftShape.getPosition().y + paddleHalfLength - ballShape.getPosition().y - m_radius) / paddleHalfLength;
+		m_moveVector.y -= ratio * ratioMultiple;
+		m_moveVector = normalizeVector(m_moveVector);
+		m_moveVector.x *= m_speed;
+		m_moveVector.y *= m_speed;
 	}
+
 	if (ballShape.getGlobalBounds().intersects(paddleRightShape.getGlobalBounds()) && m_moveVector.x > 0)
 	{
-		// For now multiply by -1 I'll add a better system later on
+		m_speed += speedIncrement;
 		m_moveVector.x *= -1;
+		m_moveVector = normalizeVector(m_moveVector);
+		float paddleHalfLength = paddleRightShape.getSize().y / 2;
+		float ratio = (paddleRightShape.getPosition().y + paddleHalfLength - ballShape.getPosition().y - m_radius) / paddleHalfLength;
+		m_moveVector.y -= ratio * ratioMultiple;
+		m_moveVector = normalizeVector(m_moveVector);
+		m_moveVector.x *= m_speed;
+		m_moveVector.y *= m_speed;
 	}
 }
