@@ -24,11 +24,12 @@ private:
 	Paddle* m_rightPaddle;
 	Ball* m_ball;
 	ScoreBoard* m_scoreBoard;
+	const sf::Time m_timePerFrame = sf::seconds(1.f / 60.f);
 public:
 	GameManager();
 	~GameManager();
 	void handleEvents();
-	void update();
+	void update(sf::Time timePerFrame);
 	void draw();
 	void mainLoop();
 };

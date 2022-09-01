@@ -129,8 +129,8 @@ void Ball::checkPaddleCollision()
 	paddleRightShape.setSize(sf::Vector2f(m_paddleRight->getSize().x, m_paddleRight->getSize().y));
 
 	const float speedIncrement = 15;
-	const float ratioMultiple = 0.15f;
-	const float movementMultiple = 0.18f;
+	const float ratioMultiple = 0.18f;
+	const float movementMultiple = 0.15f;
 
 	if (ballShape.getGlobalBounds().intersects(paddleLeftShape.getGlobalBounds()) && m_moveVector.x < 0)
 	{

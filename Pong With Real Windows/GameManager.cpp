@@ -37,9 +37,8 @@ void GameManager::handleEvents()
 		i->handleEvents();
 }
 
-void GameManager::update()
+void GameManager::update(sf::Time timePerFrame)
 {
-	m_deltaTime = m_deltaClock.restart();
 	if (sf::Keyboard::isKeyPressed((sf::Keyboard::Key)m_configManager.get(QuitKey)))
 	{
 		m_gameOver = true;
@@ -47,7 +46,7 @@ void GameManager::update()
 			i->closeWindow();
 	}
 	for (auto& i : m_gameElements)
-		i->update(m_deltaTime);
+		i->update(timePerFrame);
 
 	if (m_leftPaddle->getScore() >= m_maxScore)
 	{
@@ -76,7 +75,13 @@ void GameManager::mainLoop()
 	while (!m_gameOver)
 	{
 		handleEvents();
-		update();
+		m_deltaTime += m_deltaClock.restart();
+		while (m_deltaTime > m_timePerFrame)
+		{
+			m_deltaTime -= m_timePerFrame;
+			handleEvents();
+			update(m_timePerFrame);
+		}
 		draw();
 	}
 }
