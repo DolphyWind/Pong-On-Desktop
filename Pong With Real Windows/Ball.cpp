@@ -50,12 +50,13 @@ sf::Vector2f Ball::normalizeVector(const sf::Vector2f& vec)
 	return sf::Vector2f(vec.x / length, vec.y / length);
 }
 
-Ball::Ball(RECT* desktop, ConfigManager* configManager, Paddle* paddleLeft, Paddle* paddleRight) : GameElement(desktop, configManager)
+Ball::Ball(RECT* desktop, ConfigManager* configManager, Paddle* paddleLeft, Paddle* paddleRight, ScoreBoard* scoreBoard) : GameElement(desktop, configManager)
 {
 	m_radius = 15;
 	m_speed = m_defaultSpeed;
 	m_paddleLeft = paddleLeft;
 	m_paddleRight = paddleRight;
+	m_scoreBoard = scoreBoard;
 
 	m_window.create(sf::VideoMode(2 * m_radius, 2 * m_radius), "Ball", sf::Style::None);
 	m_window.setPosition(sf::Vector2i(
@@ -89,16 +90,25 @@ void Ball::update(sf::Time deltaTime)
 void Ball::checkWallCollision()
 {
 	sf::Vector2i windowPos = m_window.getPosition();
-	if (windowPos.y < m_desktop->top || windowPos.y + 2 * m_radius > m_desktop->bottom)
+	if (windowPos.y < m_desktop->top && m_moveVector.y < 0)
+	{
 		m_moveVector.y *= -1;
+	}
+	if (windowPos.y + 2 * m_radius > m_desktop->bottom && m_moveVector.y > 0)
+	{
+		m_moveVector.y *= -1;
+	}
+
 	if (windowPos.x < m_desktop->left)
 	{
-		m_paddleLeft->increaseScore();
+		m_paddleRight->setScore(m_paddleRight->getScore() + 1);
+		m_scoreBoard->updateScoreBoard(m_paddleLeft->getScore(), m_paddleRight->getScore());
 		restartGame();
 	}
 	if (windowPos.x + 2 * m_radius > m_desktop->right)
 	{
-		m_paddleRight->increaseScore();
+		m_paddleLeft->setScore(m_paddleLeft->getScore() + 1);
+		m_scoreBoard->updateScoreBoard(m_paddleLeft->getScore(), m_paddleRight->getScore());
 		restartGame();
 	}
 }
@@ -118,8 +128,9 @@ void Ball::checkPaddleCollision()
 	paddleRightShape.setPosition(m_paddleRight->getPosition().x, m_paddleRight->getPosition().y);
 	paddleRightShape.setSize(sf::Vector2f(m_paddleRight->getSize().x, m_paddleRight->getSize().y));
 
-	const float speedIncrement = 25;
-	const float ratioMultiple = (1.f / 6.f);
+	const float speedIncrement = 15;
+	const float ratioMultiple = 0.15f;
+	const float movementMultiple = 0.18f;
 
 	if (ballShape.getGlobalBounds().intersects(paddleLeftShape.getGlobalBounds()) && m_moveVector.x < 0)
 	{
@@ -129,6 +140,7 @@ void Ball::checkPaddleCollision()
 		float paddleHalfLength = paddleLeftShape.getSize().y / 2;
 		float ratio = (paddleLeftShape.getPosition().y + paddleHalfLength - ballShape.getPosition().y - m_radius) / paddleHalfLength;
 		m_moveVector.y -= ratio * ratioMultiple;
+		m_moveVector.y += m_paddleLeft->getMovementScalar() * movementMultiple;
 		m_moveVector = normalizeVector(m_moveVector);
 		m_moveVector.x *= m_speed;
 		m_moveVector.y *= m_speed;
@@ -142,6 +154,7 @@ void Ball::checkPaddleCollision()
 		float paddleHalfLength = paddleRightShape.getSize().y / 2;
 		float ratio = (paddleRightShape.getPosition().y + paddleHalfLength - ballShape.getPosition().y - m_radius) / paddleHalfLength;
 		m_moveVector.y -= ratio * ratioMultiple;
+		m_moveVector.y += m_paddleRight->getMovementScalar() * movementMultiple;
 		m_moveVector = normalizeVector(m_moveVector);
 		m_moveVector.x *= m_speed;
 		m_moveVector.y *= m_speed;

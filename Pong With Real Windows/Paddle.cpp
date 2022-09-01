@@ -40,11 +40,17 @@ void Paddle::update(sf::Time deltaTime)
 {
 	m_time += deltaTime.asSeconds();
 	if (m_time < 1) return;
+
+	m_movementScalar = 0;
+
 	sf::Vector2i prevPos = m_paddlePos;
 	if (sf::Keyboard::isKeyPressed(m_upKey))
-		m_paddlePos.y -= m_speed * deltaTime.asSeconds();
+		m_movementScalar = -1;
+		
 	else if (sf::Keyboard::isKeyPressed(m_downKey))
-		m_paddlePos.y += m_speed * deltaTime.asSeconds();
+		m_movementScalar = 1;
+	
+	m_paddlePos.y += m_movementScalar * m_speed * deltaTime.asSeconds();
 	
 	if (m_paddlePos.y < m_desktop->top) m_paddlePos = prevPos;
 	if (m_paddlePos.y + m_paddleSize.y > m_desktop->bottom) m_paddlePos = prevPos;
@@ -54,15 +60,6 @@ void Paddle::update(sf::Time deltaTime)
 
 	// Make always on top
 	SetWindowPos(m_window.getSystemHandle(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
-}
-
-void Paddle::increaseScore()
-{
-	m_score++;
-	if (m_score >= m_configManager->get(WinScoreKey))
-	{
-		// Win
-	}
 }
 
 void Paddle::reposition(bool firstPlayer)
@@ -78,4 +75,19 @@ void Paddle::reposition(bool firstPlayer)
 		m_paddlePos.y = ((int)m_desktop->bottom - (int)m_desktop->top) / 2 - (int)m_paddleSize.y / 2;
 	}
 	m_window.setPosition(m_paddlePos);
+}
+
+unsigned int Paddle::getScore()
+{
+	return m_score;
+}
+
+void Paddle::setScore(unsigned int score)
+{
+	m_score = score;
+}
+
+int Paddle::getMovementScalar()
+{
+	return m_movementScalar;
 }

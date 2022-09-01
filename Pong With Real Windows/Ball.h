@@ -7,11 +7,12 @@
 #include <atltypes.h>
 #include "ConfigManager.h"
 #include "Paddle.h"
+#include "ScoreBoard.h"
 
 class Ball : public GameElement
 {
 private:
-	const float m_defaultSpeed = 500;
+	const float m_defaultSpeed = 600;
 	float m_radius;
 	float m_speed;
 	void makeCircular();
@@ -23,8 +24,9 @@ private:
 	Paddle* m_paddleLeft;
 	Paddle* m_paddleRight;
 	sf::Vector2f normalizeVector(const sf::Vector2f& vec);
+	ScoreBoard* m_scoreBoard;
 public:
-	Ball(RECT* desktop, ConfigManager* configManager, Paddle* paddleLeft, Paddle* paddleRight);
+	Ball(RECT* desktop, ConfigManager* configManager, Paddle* paddleLeft, Paddle* paddleRight, ScoreBoard* scoreBoard);
 	void update(sf::Time deltaTime) override;
 };
 

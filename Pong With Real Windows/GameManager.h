@@ -7,6 +7,7 @@
 #include "ConfigManager.h"
 #include "Paddle.h"
 #include "Ball.h"
+#include "ScoreBoard.h"
 
 class GameManager
 {
@@ -17,6 +18,12 @@ private:
 	sf::Time m_deltaTime;
 	std::vector<GameElement*> m_gameElements;
 	ConfigManager m_configManager;
+	sf::Font m_font;
+	unsigned int m_maxScore;
+	Paddle* m_leftPaddle;
+	Paddle* m_rightPaddle;
+	Ball* m_ball;
+	ScoreBoard* m_scoreBoard;
 public:
 	GameManager();
 	~GameManager();

@@ -5,8 +5,6 @@ void GameElement::closeWindow()
 	m_window.close();
 }
 
-
-
 void GameElement::handleEvents()
 {
 	sf::Event e;
@@ -40,7 +38,8 @@ GameElement::GameElement(RECT* desktop, ConfigManager* configManager)
 
 void GameElement::update(sf::Time deltaTime)
 {
-	m_time += deltaTime.asSeconds();
+	// Make always on top
+	SetWindowPos(m_window.getSystemHandle(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 }
 
 void GameElement::draw()
@@ -83,4 +82,9 @@ sf::Vector2u GameElement::getSize()
 void GameElement::resetTime()
 {
 	m_time = 0;
+}
+
+sf::RenderWindow* GameElement::getWindow()
+{
+	return &m_window;
 }

@@ -28,4 +28,5 @@ public:
 	void setSize(sf::Vector2u size);
 	sf::Vector2u getSize();
 	void resetTime();
+	sf::RenderWindow* getWindow();
 };
