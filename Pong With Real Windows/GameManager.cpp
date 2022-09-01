@@ -7,6 +7,7 @@ GameManager::GameManager()
 	else GetWindowRect(GetDesktopWindow(), &m_desktop);
 	m_gameElements.push_back(new Paddle(&m_desktop, true, &m_configManager));
 	m_gameElements.push_back(new Paddle(&m_desktop, false, &m_configManager));
+	m_gameElements.push_back(new Ball(&m_desktop, &m_configManager, (Paddle*)m_gameElements[0], (Paddle*)m_gameElements[1]));
 }
 
 GameManager::~GameManager()

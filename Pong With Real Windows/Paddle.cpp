@@ -1,6 +1,6 @@
 #include "Paddle.h"
 
-Paddle::Paddle(RECT *desktop, bool firstPlayer, ConfigManager *configManager) : GameElement(desktop)
+Paddle::Paddle(RECT *desktop, bool firstPlayer, ConfigManager *configManager) : GameElement(desktop, configManager)
 {
 	m_paddleSize = sf::Vector2u(25, ((int)desktop->bottom - (int)desktop->top) / 6);
 
@@ -32,26 +32,50 @@ Paddle::Paddle(RECT *desktop, bool firstPlayer, ConfigManager *configManager) : 
 	m_window.create(sf::VideoMode(m_paddleSize.x, m_paddleSize.y), "Paddle", sf::Style::None);
 	m_window.setPosition(m_paddlePos);
 	m_window.setFramerateLimit(60);
-	m_speed = 5;
+	m_speed = 450;
+	m_score = 0;
 }
 
 void Paddle::update(sf::Time deltaTime)
 {
+	m_time += deltaTime.asSeconds();
+	if (m_time < 1) return;
 	sf::Vector2i prevPos = m_paddlePos;
 	if (sf::Keyboard::isKeyPressed(m_upKey))
-	{
-		m_paddlePos.y -= m_speed;
-		m_window.setPosition(m_paddlePos);
-	}
-	if (sf::Keyboard::isKeyPressed(m_downKey))
-	{
-		m_paddlePos.y += m_speed;
-		m_window.setPosition(m_paddlePos);
-	}
+		m_paddlePos.y -= m_speed * deltaTime.asSeconds();
+	else if (sf::Keyboard::isKeyPressed(m_downKey))
+		m_paddlePos.y += m_speed * deltaTime.asSeconds();
 	
 	if (m_paddlePos.y < m_desktop->top) m_paddlePos = prevPos;
 	if (m_paddlePos.y + m_paddleSize.y > m_desktop->bottom) m_paddlePos = prevPos;
 
+	if(prevPos != m_paddlePos)
+		m_window.setPosition(m_paddlePos);
+
 	// Make always on top
 	SetWindowPos(m_window.getSystemHandle(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+}
+
+void Paddle::increaseScore()
+{
+	m_score++;
+	if (m_score >= m_configManager->get(WinScoreKey))
+	{
+		// Win
+	}
+}
+
+void Paddle::reposition(bool firstPlayer)
+{
+	if (firstPlayer)
+	{
+		m_paddlePos.x = (int)m_desktop->left;
+		m_paddlePos.y = ((int)m_desktop->bottom - (int)m_desktop->top) / 2 - (int)m_paddleSize.y / 2;
+	}
+	else
+	{
+		m_paddlePos.x = (int)m_desktop->right - m_paddleSize.x;
+		m_paddlePos.y = ((int)m_desktop->bottom - (int)m_desktop->top) / 2 - (int)m_paddleSize.y / 2;
+	}
+	m_window.setPosition(m_paddlePos);
 }
