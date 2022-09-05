@@ -21,6 +21,7 @@ private:
 	void restartGame();
 	void checkWallCollision();
 	void checkPaddleCollision();
+	sf::Vector2f m_windowPosition;
 	sf::Vector2f m_moveVector;
 	Paddle* m_paddleLeft;
 	Paddle* m_paddleRight;

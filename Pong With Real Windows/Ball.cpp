@@ -65,6 +65,9 @@ Ball::Ball(RECT* desktop, ConfigManager* configManager, Paddle* paddleLeft, Padd
 		((int)desktop->right - (int)desktop->left) / 2 - m_radius,
 		((int)desktop->bottom - (int)desktop->top) / 2 - m_radius
 	));
+	m_windowPosition.x = m_window.getPosition().x;
+	m_windowPosition.y = m_window.getPosition().y;
+
 	setClearColor(sf::Color(
 		configManager->get(BallRKey),
 		configManager->get(BallGKey),
@@ -78,10 +81,15 @@ void Ball::update(sf::Time deltaTime)
 {
 	m_time += deltaTime.asSeconds();
 	if (m_time < 1) return;
+
+	m_windowPosition.x += m_moveVector.x * deltaTime.asSeconds();
+	m_windowPosition.y += m_moveVector.y * deltaTime.asSeconds();
+
 	m_window.setPosition(sf::Vector2i(
-		m_window.getPosition().x + m_moveVector.x * deltaTime.asSeconds(),
-		m_window.getPosition().y + m_moveVector.y * deltaTime.asSeconds()
+		m_windowPosition.x,
+		m_windowPosition.y
 	));
+
 	checkWallCollision();
 	checkPaddleCollision();
 
@@ -91,23 +99,24 @@ void Ball::update(sf::Time deltaTime)
 
 void Ball::checkWallCollision()
 {
-	sf::Vector2i windowPos = m_window.getPosition();
-	if (windowPos.y < m_desktop->top && m_moveVector.y < 0)
+	if (m_windowPosition.y < m_desktop->top && m_moveVector.y < 0)
 	{
 		m_moveVector.y *= -1;
 	}
-	if (windowPos.y + 2 * m_radius > m_desktop->bottom && m_moveVector.y > 0)
+	if (m_windowPosition.y + 2 * m_radius > m_desktop->bottom && m_moveVector.y > 0)
 	{
 		m_moveVector.y *= -1;
 	}
 
-	if (windowPos.x < m_desktop->left)
+	//std::cout << m_moveVector.y << std::endl;
+	
+	if (m_windowPosition.x < m_desktop->left)
 	{
 		m_paddleRight->setScore(m_paddleRight->getScore() + 1);
 		m_scoreBoard->updateScoreBoard(m_paddleLeft->getScore(), m_paddleRight->getScore());
 		restartGame();
 	}
-	if (windowPos.x + 2 * m_radius > m_desktop->right)
+	if (m_windowPosition.x + 2 * m_radius > m_desktop->right)
 	{
 		m_paddleLeft->setScore(m_paddleLeft->getScore() + 1);
 		m_scoreBoard->updateScoreBoard(m_paddleLeft->getScore(), m_paddleRight->getScore());
