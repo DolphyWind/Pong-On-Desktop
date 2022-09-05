@@ -53,7 +53,9 @@ sf::Vector2f Ball::normalizeVector(const sf::Vector2f& vec)
 Ball::Ball(RECT* desktop, ConfigManager* configManager, Paddle* paddleLeft, Paddle* paddleRight, ScoreBoard* scoreBoard) : GameElement(desktop, configManager)
 {
 	m_radius = 15;
+	m_defaultSpeed = m_configManager->get(BallStarterSpeedKey);
 	m_speed = m_defaultSpeed;
+	m_speedIncrement = m_configManager->get(BallSpeedIncrementKey);
 	m_paddleLeft = paddleLeft;
 	m_paddleRight = paddleRight;
 	m_scoreBoard = scoreBoard;
@@ -128,13 +130,12 @@ void Ball::checkPaddleCollision()
 	paddleRightShape.setPosition(m_paddleRight->getPosition().x, m_paddleRight->getPosition().y);
 	paddleRightShape.setSize(sf::Vector2f(m_paddleRight->getSize().x, m_paddleRight->getSize().y));
 
-	const float speedIncrement = 15;
 	const float ratioMultiple = 0.18f;
 	const float movementMultiple = 0.15f;
 
 	if (ballShape.getGlobalBounds().intersects(paddleLeftShape.getGlobalBounds()) && m_moveVector.x < 0)
 	{
-		m_speed += speedIncrement;
+		m_speed += m_speedIncrement;
 		m_moveVector.x *= -1;
 		m_moveVector = normalizeVector(m_moveVector);
 		float paddleHalfLength = paddleLeftShape.getSize().y / 2;
@@ -148,7 +149,7 @@ void Ball::checkPaddleCollision()
 
 	if (ballShape.getGlobalBounds().intersects(paddleRightShape.getGlobalBounds()) && m_moveVector.x > 0)
 	{
-		m_speed += speedIncrement;
+		m_speed += m_speedIncrement;
 		m_moveVector.x *= -1;
 		m_moveVector = normalizeVector(m_moveVector);
 		float paddleHalfLength = paddleRightShape.getSize().y / 2;

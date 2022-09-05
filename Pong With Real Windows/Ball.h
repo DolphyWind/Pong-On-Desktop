@@ -12,7 +12,8 @@
 class Ball : public GameElement
 {
 private:
-	const float m_defaultSpeed = 600;
+	float m_defaultSpeed;
+	float m_speedIncrement;
 	float m_radius;
 	float m_speed;
 	void makeCircular();

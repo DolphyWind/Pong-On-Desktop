@@ -32,7 +32,7 @@ Paddle::Paddle(RECT *desktop, bool firstPlayer, ConfigManager *configManager) : 
 	m_window.create(sf::VideoMode(m_paddleSize.x, m_paddleSize.y), "Paddle", sf::Style::None);
 	m_window.setPosition(m_paddlePos);
 	m_window.setFramerateLimit(60);
-	m_speed = 450;
+	m_speed = m_configManager->get(PaddleSpeedKey);
 	m_score = 0;
 }
 
@@ -52,8 +52,8 @@ void Paddle::update(sf::Time deltaTime)
 	
 	m_paddlePos.y += m_movementScalar * m_speed * deltaTime.asSeconds();
 	
-	if (m_paddlePos.y < m_desktop->top) m_paddlePos = prevPos;
-	if (m_paddlePos.y + m_paddleSize.y > m_desktop->bottom) m_paddlePos = prevPos;
+	if (m_paddlePos.y < m_desktop->top) m_paddlePos.y = m_desktop->top;
+	if (m_paddlePos.y + m_paddleSize.y > m_desktop->bottom) m_paddlePos.y = m_desktop->bottom - m_paddleSize.y;
 
 	if(prevPos != m_paddlePos)
 		m_window.setPosition(m_paddlePos);

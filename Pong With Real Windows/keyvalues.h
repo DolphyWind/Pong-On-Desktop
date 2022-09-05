@@ -16,3 +16,6 @@
 #define Paddle2UpKey "Keyboard_Paddle2_UpKey"
 #define Paddle2DownKey "Keyboard_Paddle2_DownKey"
 #define QuitKey "Keyboard_Quit"
+#define BallStarterSpeedKey "General_BallStarterSpeed"
+#define BallSpeedIncrementKey "General_BallSpeedIncrement"
+#define PaddleSpeedKey "General_PaddleSpeed"

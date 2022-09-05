@@ -1,20 +1,23 @@
 # The symbol '#' makes rest of the line a comment.
 
-Keyboard_Quit=36
-Keyboard_Paddle2_UpKey=73
-Keyboard_Paddle2_DownKey=74
-Keyboard_Paddle1_UpKey=22
-Keyboard_Paddle1_DownKey=18
-General_WinScore=10
-General_UseAllDisplays=0
-Color_Paddle2_R=255
-Color_Paddle2_G=255
-Color_Paddle2_B=255
-Color_Paddle1_R=255
-Color_Paddle1_G=255
-Color_Paddle1_B=255
-Color_Ball_R=255
-Color_Ball_G=255
-Color_Ball_B=255
+Keyboard_Quit=36 #Key to press in order to quit game
+Keyboard_Paddle2_UpKey=73 #Right paddle up key
+Keyboard_Paddle2_DownKey=74 #Right paddle down key
+Keyboard_Paddle1_UpKey=22 #Left paddle up key
+Keyboard_Paddle1_DownKey=18 #Left paddle down key
+General_WinScore=10 #The amount of score a player get in order to win
+General_UseAllDisplays=0 #Uses all monitors that you have. 0: False, 1: True
+General_PaddleSpeed=700 #Speed of each paddle
+General_BallStarterSpeed=600 #Starter speed of the ball
+General_BallSpeedIncrement=15 #Every time ball collides with a paddle it increases its speed by this value
+Color_Paddle2_R=255 #R component of right paddle's color
+Color_Paddle2_G=255 #G component of right paddle's color
+Color_Paddle2_B=255 #B component of right paddle's color
+Color_Paddle1_R=255 #R component of left paddle's color
+Color_Paddle1_G=255 #G component of left paddle's color
+Color_Paddle1_B=255 #B component of left paddle's color
+Color_Ball_R=255 #R component of ball's color
+Color_Ball_G=255 #G component of ball's color
+Color_Ball_B=255 #B component of ball's color
 
 # Visit https://documentation.help/SFML.Net/7aeaa645-3732-3c60-a542-8732c47880e2.htm to see which number corresponds to which key

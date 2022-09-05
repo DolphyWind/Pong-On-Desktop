@@ -25,7 +25,7 @@ void ConfigManager::loadFile()
 					if (isalpha(c)) throw std::exception();
 				}
 				int value = std::stoi(valueStr);
-				m_values[key] = value;
+				m_values[key] = std::make_tuple(value, std::get<std::string>(m_values.at(key)));
 			}
 			catch (std::exception& e)
 			{
@@ -46,29 +46,32 @@ void ConfigManager::createFile()
 	m_fileWrite.open(m_filename);
 	m_fileWrite << "# The symbol '#' makes rest of the line a comment." << std::endl << std::endl;
 	for (auto& p : m_values)
-		m_fileWrite << p.first << "=" << p.second << std::endl;
+		m_fileWrite << p.first << "=" << std::get<int>(p.second) << " #" << std::get<std::string>(p.second) << std::endl;
 	m_fileWrite << std::endl << "# Visit https://documentation.help/SFML.Net/7aeaa645-3732-3c60-a542-8732c47880e2.htm to see which number corresponds to which key";
 	m_fileWrite.close();
 }
 
 void ConfigManager::resetSettings()
 {
-	m_values.insert({ UseAllDisplaysKey, 0 });
-	m_values.insert({ WinScoreKey, 10 });
-	m_values.insert({ Paddle1RKey, 255 });
-	m_values.insert({ Paddle1GKey, 255 });
-	m_values.insert({ Paddle1BKey, 255 });
-	m_values.insert({ Paddle2RKey, 255 });
-	m_values.insert({ Paddle2GKey, 255 });
-	m_values.insert({ Paddle2BKey, 255 });
-	m_values.insert({ BallRKey, 255 });
-	m_values.insert({ BallGKey, 255 });
-	m_values.insert({ BallBKey, 255 });
-	m_values.insert({ Paddle1UpKey, sf::Keyboard::Key::W });
-	m_values.insert({ Paddle1DownKey, sf::Keyboard::Key::S });
-	m_values.insert({ Paddle2UpKey, sf::Keyboard::Key::Up });
-	m_values.insert({ Paddle2DownKey, sf::Keyboard::Key::Down });
-	m_values.insert({ QuitKey, sf::Keyboard::Key::Escape });
+	m_values.insert({ UseAllDisplaysKey, std::make_tuple(0, "Uses all monitors that you have. 0: False, 1: True") });
+	m_values.insert({ WinScoreKey, std::make_tuple(10, "The amount of score a player get in order to win") });
+	m_values.insert({ Paddle1RKey, std::make_tuple(255, "R component of left paddle's color") });
+	m_values.insert({ Paddle1GKey, std::make_tuple(255, "G component of left paddle's color") });
+	m_values.insert({ Paddle1BKey, std::make_tuple(255, "B component of left paddle's color") });
+	m_values.insert({ Paddle2RKey, std::make_tuple(255, "R component of right paddle's color") });
+	m_values.insert({ Paddle2GKey, std::make_tuple(255, "G component of right paddle's color") });
+	m_values.insert({ Paddle2BKey, std::make_tuple(255, "B component of right paddle's color") });
+	m_values.insert({ BallRKey, std::make_tuple(255, "R component of ball's color") });
+	m_values.insert({ BallGKey, std::make_tuple(255, "G component of ball's color") });
+	m_values.insert({ BallBKey, std::make_tuple(255, "B component of ball's color") });
+	m_values.insert({ Paddle1UpKey, std::make_tuple(sf::Keyboard::Key::W, "Left paddle up key") });
+	m_values.insert({ Paddle1DownKey, std::make_tuple(sf::Keyboard::Key::S, "Left paddle down key") });
+	m_values.insert({ Paddle2UpKey, std::make_tuple(sf::Keyboard::Key::Up, "Right paddle up key") });
+	m_values.insert({ Paddle2DownKey, std::make_tuple(sf::Keyboard::Key::Down, "Right paddle down key") });
+	m_values.insert({ QuitKey, std::make_tuple(sf::Keyboard::Key::Escape, "Key to press in order to quit game") });
+	m_values.insert({ BallStarterSpeedKey, std::make_tuple(600, "Starter speed of the ball") });
+	m_values.insert({ BallSpeedIncrementKey, std::make_tuple(15, "Every time ball collides with a paddle it increases its speed by this value") });
+	m_values.insert({ PaddleSpeedKey, std::make_tuple(700, "Speed of each paddle") });
 }
 
 std::string ConfigManager::lrTrim(const std::string& str)
@@ -80,7 +83,7 @@ std::string ConfigManager::lrTrim(const std::string& str)
 
 int ConfigManager::get(const std::string& key)
 {
-	return m_values.at(key);
+	return std::get<int>(m_values.at(key));
 }
 
 ConfigManager::ConfigManager()
