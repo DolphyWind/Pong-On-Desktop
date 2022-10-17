@@ -33,6 +33,8 @@ void Ball::restartGame()
 		((int)m_desktop->right - (int)m_desktop->left) / 2 - m_radius,
 		((int)m_desktop->bottom - (int)m_desktop->top) / 2 - m_radius
 	));
+	m_windowPosition = {(float)m_window.getPosition().x, (float)m_window.getPosition().y};
+
 	m_speed = m_defaultSpeed;
 	randomizeAngle();
 
